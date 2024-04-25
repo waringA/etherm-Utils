@@ -1,18 +1,24 @@
+import dayjs from 'dayjs';
 import { ethers } from 'ethers';
 import { readFileSync, writeFileSync } from 'node:fs';
-import dayjs from 'dayjs';
 class EthermUtils {
   constructor({ rpc, url }) {
     this.provider = new ethers.JsonRpcProvider(rpc);
-    this.wallet;
     this.url = url;
+    this.wallet;
+    this.contract;
+  }
+  createContract(address, abi, provider) {
+    this.contract = new ethers.Contract(address, abi, provider);
+    return this.contract;
   }
   changeNetWork({ rpc, url }) {
     this.provider = new ethers.JsonRpcProvider(rpc);
     this.url = url;
+    return this.provider;
   }
-  async getBlance(address = this.wallet.address, leng = 3) {
-    return this.formatPrice(await this.provider.getBalance(address), leng);
+  async getBlance(address = this.wallet.address, leng = 3, provider = this.provider) {
+    return this.formatPrice(await provider.getBalance(address), leng);
   }
   formatPrice(price, leng = 3) {
     const _price = Number(ethers.formatEther(price));
@@ -27,8 +33,9 @@ class EthermUtils {
     const { address, privateKey } = ethers.Wallet.createRandom();
     return { address, privateKey };
   }
-  linkWallet(key) {
-    this.wallet = new ethers.Wallet(key, this.provider);
+  linkWallet(key, provider = this.provider) {
+    this.wallet = new ethers.Wallet(key, provider);
+    return this.wallet;
   }
   async sendTransaction(arg) {
     if (this.wallet) {
