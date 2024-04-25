@@ -4,7 +4,7 @@
 
 ### 为了减去繁琐且无聊的操作所封装的一个工具库 可以进行各种升级变得更好用
 
-‍
+‍#### 每个都可以独立返回使用 可以复用 可以类用 想怎么用怎么用
 
 > /config  配置rpc与url初始化信息  导出为:`netWorkConfig`​
 
@@ -26,8 +26,11 @@
 ```javascript
 new EthermUtils(netWorkConfig.BSC: {rpc: string, url: string})
 
-# changeNetWork 改变网络 没有返回值
-ethUtils.changeNetWork(netWorkConfig.ETH):void
+# changeNetWork 改变网络 
+ethUtils.changeNetWork(netWorkConfig.ETH):ethers.JsonRpcProvider
+
+# createContract 创建合约功能 
+ethermUtils.createContract(address: string, abi: Array, provider: ethers.JsonRpcProvider )
 
 # getBlance 没有参数默认为连接账户的地址 获取经过转换的余额,默认保留3位小数 leng可以自定义
 ethUtils.getBlance(address: string, leng: number):number
@@ -41,8 +44,8 @@ ethUtils.parsePrice(price: string | number):bigint
 # createWallet 随机创建钱包 address钱包地址 privateKey私钥地址
 ethUtils.ethUtils():{address: string, privateKey: string}
 
-# linkWallet 传入私钥连接钱包 没有返回值
-ethUtils.linkWallet(key: string):void
+# linkWallet 传入私钥连接钱包 
+ethUtils.linkWallet(key: string):ethers.Wallet
 
 # sendTransaction 发送交易
 ethUtils.sendTransaction(arg: {to: string, value: bigint}):ethers.TransactionResponse
@@ -59,5 +62,3 @@ ethUtils.readFile(fileName: string): any
 # sleep 休眠
 ethUtils.sleep(time: number):Promise
 ```
-
-‍

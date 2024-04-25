@@ -8,26 +8,14 @@ class EthermUtils {
     this.wallet;
     this.contract;
   }
-  createContract(address, abi, provider) {
-    this.contract = new ethers.Contract(address, abi, provider);
-    return this.contract;
-  }
   changeNetWork({ rpc, url }) {
     this.provider = new ethers.JsonRpcProvider(rpc);
     this.url = url;
     return this.provider;
   }
-  async getBlance(address = this.wallet.address, leng = 3, provider = this.provider) {
-    return this.formatPrice(await provider.getBalance(address), leng);
-  }
-  formatPrice(price, leng = 3) {
-    const _price = Number(ethers.formatEther(price));
-    const fmtPrice = _price.toFixed(leng);
-    return fmtPrice;
-  }
-  parsePrice(price) {
-    const fmtPrice = String(price);
-    return ethers.parseEther(fmtPrice);
+  createContract(address, abi, provider) {
+    this.contract = new ethers.Contract(address, abi, provider);
+    return this.contract;
   }
   createWallet() {
     const { address, privateKey } = ethers.Wallet.createRandom();
@@ -41,7 +29,6 @@ class EthermUtils {
     if (this.wallet) {
       const tx = await this.wallet.sendTransaction({ ...arg });
       const result = await tx.wait();
-      console.log('拿到了');
       const parseUrl = {
         scanUrl: `${this.url}tx/${result.hash}`,
         statuTime: this.formatTime(),
@@ -51,6 +38,20 @@ class EthermUtils {
       console.log('Wallet not Link');
     }
   }
+
+  async getBlance(address = this.wallet.address, leng = 3, provider = this.provider) {
+    return this.formatPrice(await provider.getBalance(address), leng);
+  }
+  formatPrice(price, leng = 3) {
+    const _price = Number(ethers.formatEther(price));
+    const fmtPrice = _price.toFixed(leng);
+    return fmtPrice;
+  }
+  parsePrice(price) {
+    const fmtPrice = String(price);
+    return ethers.parseEther(fmtPrice);
+  }
+
   formatData(type, data) {
     if (type === 'stringify') {
       return JSON.stringify(data);
